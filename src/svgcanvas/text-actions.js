@@ -447,6 +447,12 @@ export const textActionsMethod = (function () {
       textinput = elem
     },
     /**
+* @returns {Integer}
+*/
+    getBlinker () {
+      return blinker
+    },
+    /**
 * @returns {void}
 */
     clear () {

@@ -18,6 +18,7 @@ import * as draw from './draw.js'
 import * as pathModule from './path.js'
 import * as hstry from './history.js'
 import { findPos } from '../editor/components/jgraduate/Util.js'
+import { textActionsMethod } from './text-actions.js'
 
 const {
   InsertElementCommand
@@ -107,8 +108,6 @@ const mouseMoveEvent = (evt) => {
   if (!svgCanvas.getStarted()) { return }
   if (evt.button === 1 || svgCanvas.spaceKey) { return }
 
-  svgCanvas.textActions.init()
-
   evt.preventDefault()
 
   const selectedElements = svgCanvas.getSelectedElements()
@@ -165,6 +164,9 @@ const mouseMoveEvent = (evt) => {
           })
           svgCanvas.call('transition', selectedElements)
         }
+
+        // update cursor style
+        if (textActionsMethod.getBlinker()) textActionsMethod.init(svgCanvas.getText())
       }
       break
     }
@@ -299,6 +301,9 @@ const mouseMoveEvent = (evt) => {
 
       svgCanvas.selectorManager.requestSelector(selected).resize()
       svgCanvas.call('transition', selectedElements)
+      
+      // update cursor style
+      if (textActionsMethod.getBlinker()) textActionsMethod.init(svgCanvas.getText())
 
       break
     }
@@ -507,6 +512,10 @@ const mouseMoveEvent = (evt) => {
 
       svgCanvas.setRotationAngle(angle < -180 ? (360 + angle) : angle, true)
       svgCanvas.call('transition', selectedElements)
+
+      // update cursor style
+      if (textActionsMethod.getBlinker()) textActionsMethod.init(svgCanvas.getText())
+
       break
     }
     default:
@@ -559,8 +568,6 @@ const mouseOutEvent = () => {
 const mouseUpEvent = (evt) => {
   if (evt.button === 2) { return }
   if (!svgCanvas.getStarted()) { return }
-
-  svgCanvas.textActions.init()
 
   const selectedElements = svgCanvas.getSelectedElements()
   const zoom = svgCanvas.getZoom()
